@@ -1,0 +1,69 @@
+import random
+
+class DragonBallZCharacter:
+    def __init__(self, name, hp, power_level, attack_damage, defense):
+        self.name = name
+        self.hp = hp
+        self.power_level = power_level
+        self.attack_damage = attack_damage
+        self.defense = defense
+
+    def attack(self, enemy):
+        damage = self.attack_damage * (self.power_level / enemy.defense)
+        enemy.hp -= damage
+        print(f"{self.name} attacks {enemy.name} for {damage:.2f} damage!")
+
+    def defend(self, enemy):
+        print(f"{self.name} defends against {enemy.name}'s attack.")
+
+    def is_alive(self):
+        return self.hp > 0
+
+    def roll_dice(self):
+        return random.randint(1, 20)
+
+# Define Dragon Ball Z characters
+goku = DragonBallZCharacter("Goku", hp=100, power_level=9000, attack_damage=20, defense=10)
+vegeta = DragonBallZCharacter("Vegeta", hp=90, power_level=8000, attack_damage=25, defense=12)
+piccolo = DragonBallZCharacter("Piccolo", hp=80, power_level=7500, attack_damage=22, defense=15)
+
+# Define a simple enemy
+enemy = DragonBallZCharacter("Frieza", hp=200, power_level=10000, attack_damage=30, defense=20)
+
+# Battle function
+def battle(player, enemy):
+    print(f"A wild {enemy.name} appears!")
+    while player.is_alive() and enemy.is_alive():
+        player_roll = player.roll_dice()
+        enemy_roll = enemy.roll_dice()
+        print(f"{player.name} rolls a {player_roll}.")
+        print(f"{enemy.name} rolls a {enemy_roll}.")
+        if player_roll > enemy_roll:
+            player.attack(enemy)
+        elif player_roll < enemy_roll:
+            enemy.attack(player)
+        else:
+            print("It's a tie! No damage dealt.")
+
+        if not player.is_alive():
+            print(f"{player.name} has been defeated!")
+        elif not enemy.is_alive():
+            print(f"{enemy.name} has been defeated!")
+
+# Start the game
+player_choice = input("Choose your character (Goku, Vegeta, Piccolo): ").capitalize()
+if player_choice == "Goku":
+    player = goku
+elif player_choice == "Vegeta":
+    player = vegeta
+elif player_choice == "Piccolo":
+    player = piccolo
+else:
+    print("Invalid character choice. Exiting game.")
+    exit()
+
+print(f"You have chosen {player.name}!")
+
+# Start a battle
+battle(player, enemy)
+
